@@ -1,6 +1,8 @@
 from flask import request, jsonify
 from flask_restful import Resource
-from models import User
+from .models import User, Ride, Request
+
+
 
 class Signup(Resource):
     """  Class for registration.  """
@@ -27,24 +29,25 @@ class Signup(Resource):
         elif password != confirmpwd:
             return {'message':"Passwords do not match!"}
                 
-        new_user = User(
-
+        new_user = User(            
             username=username, 
             firstname=firstname, 
             lastname=lastname, 
             email=email, 
             password=password
-
             )
-        user=new_user.get_username()
-        if user:
-            return{'message':"user exists!"}
-        new_user.register
 
-        return{'message':"registered!"},201
-
-
-         
+        new_user.get_user_by_username()
+        if new_user.user:
+            return {'message':"A user with that username exists!"},409
+        if new_user.user_exists() == True:
+            return{'message':'A user with that email already exists!'},409
+        new_user.password_hash(password)
+        new_user.register()
+        usr_data = new_user.view()
+        return{'message':"You have been successfully registered!", 'details':usr_data},201
+    
+     
 
 class Login(Resource):
     """  Class for signing in"""
