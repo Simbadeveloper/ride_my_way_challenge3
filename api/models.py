@@ -1,21 +1,43 @@
-import os
-import psycopg2
+from passlib.apps import custom_app_context as pwd
 
-conn = psycopg2.connect(os.environ['DEV_DB_URI'])
-cur = conn.cursor()
+import sys  # handle imports
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from config import con
+
+cur = con.cursor()
 
 class User(object):
     """  Class for user model.  """
 
-    def __init__(self,user_id, username, firstname, lastname, email, password):
+    def __init__(self, username, firstname, lastname, email, password):
         """  Initialising the user model objects.  """
 
-        self.user_id = user_id
         self.username = username
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
+
+    def password_hash(self, password):
+        self.password = pwd.encrypt(password)
+    
+    def password_verify(self, password):
+        return pwd.verify(password, self.password)
+
+    def get_username(self):
+        cur.execute("SELECT * FROM users WHERE email='{0}';".format(self.email))
+        self.user = cur.fetchone()
+
+    def register(self):
+        """  Adding a user into the db. """
+        user = """ INSERT INTO users (username, firstname, lastname, email, password)
+            VALUES (%s,%s,%s,%s,%s)""" % (self.username, self.firstname, self.lastname, self.email,self.password)
+        #create the user in the db
+        cur.execute(user)
+        #commit the changes: makes them persistent
+        con.commit()
         
 
 class Ride(object):
