@@ -1,18 +1,21 @@
-import os
 import psycopg2
 
-from config import con
+def connect_to_db():
+    """  Method for connecting to the database.  """
 
-#connecting to the database
-# con = psycopg2.connect(os.environ['DEV_DB_URI'])
-try:
-    con = psycopg2.connect(database='development', user='postgres', host='localhost', password='password77')
-except:
-    print ("NOPE NOPE NOPE!!")
-#object that allows the execution of sql statements to the database
-cur = con.cursor()
+    connection = 'dbname=development user=carpool password=carpool host=localhost '
+    print (connection)
+    try:
+        return psycopg2.connect(connection)
+    except:
+        print("can't connect")
+
+conn=connect_to_db()
+cur = conn.cursor()
 
 def users():
+    """  Method for creating the users table.  """
+
     table = (
         """ 
         CREATE TABLE users(
@@ -25,11 +28,37 @@ def users():
         """
         )
     cur.execute(table)
-    con.commit()
+    conn.commit()
+    print("Created")
 
 def rides():
-    pass
+    """  Method for creating the rides table.  """
+
+    table = (
+        """
+        CREATE TABLE rides(
+            id serial PRIMARY KEY,
+            driver varchar,
+            destination varchar,
+            departure_time varchar, 
+            route varchar, 
+            extras varchar);
+        """
+    )
+    cur.execute(table)
+    conn.commit()
+    
 
 def requests():
-    pass
+    """  Method for creating the requests table.  """
 
+    table = (
+        """
+        CREATE TABLE requests(
+            id serial PRIMARY KEY,
+            user_id int,
+            ride_id int):
+        """
+    )
+    cur.execute(table)
+    conn.commit()
