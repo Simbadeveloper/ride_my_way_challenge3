@@ -1,0 +1,12 @@
+__pycache__
+config.pyc
+main.pyc
+run.pyc
+.pytest_cache
+tests/.pytest_cache
+tests/__pycache__
+
+
+__pycache__/main.cpython-36.pyc
+__pycache__/main.cpython-36.pyc
+.coverage
