@@ -1,12 +1,9 @@
+import psycopg2
 from passlib.apps import custom_app_context as pwd
+from .db_tables import connect_to_db, users
 
-import sys  # handle imports
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from config import con
-
-cur = con.cursor()
+conn=connect_to_db()
+cur = conn.cursor()
 
 class User(object):
     """  Class for user model.  """
@@ -26,19 +23,33 @@ class User(object):
     def password_verify(self, password):
         return pwd.verify(password, self.password)
 
-    def get_username(self):
-        cur.execute("SELECT * FROM users WHERE email='{0}';".format(self.email))
+    def register(self):
+        """" Method for adding a verified user into the database.  """
+        user = """INSERT INTO
+                users  (username, firstname, lastname, email, password)
+                VALUES ('%s','%s','%s','%s','%s')""" % (self.username, self.firstname, self.lastname, self.email,self.password)
+        cur.execute(user)
+        conn.commit()
+
+    def get_user_by_username(self):
+        """  Method for checking whether a user is in the database using username.  """
+        cur.execute("SELECT * FROM users WHERE username='{0}';".format(self.username))
         self.user = cur.fetchone()
 
-    def register(self):
-        """  Adding a user into the db. """
-        user = """ INSERT INTO users (username, firstname, lastname, email, password)
-            VALUES (%s,%s,%s,%s,%s)""" % (self.username, self.firstname, self.lastname, self.email,self.password)
-        #create the user in the db
-        cur.execute(user)
-        #commit the changes: makes them persistent
-        con.commit()
-        
+    def user_exists(self):
+        cur.execute("SELECT * FROM users WHERE email='{0}';".format(self.email))
+        return_data = cur.fetchone()
+        if return_data:
+            return True
+        return False
+
+    def view(self):
+        return {
+            'username':self.username,
+            'email':self.email
+        }
+
+              
 
 class Ride(object):
     """  Class for ride model.  """
