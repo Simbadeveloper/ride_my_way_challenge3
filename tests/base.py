@@ -1,17 +1,13 @@
 import json
 import unittest 
-
-import sys  # handle imports
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from main import create_app
+
 
 class Base(unittest.TestCase):
     """ Base class. """
 
     def setUp(self):
-        """  Set up testing. """
+        """ Set up testing. """
 
         self.app = create_app('testing')
         self.client = self.app.test_client()
@@ -27,5 +23,4 @@ class Base(unittest.TestCase):
         """ Clear anything that has been saved. """
 
         pass
-
-      
+    
