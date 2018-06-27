@@ -12,7 +12,7 @@ class Testing(Config):
     """
 
     DEBUG = True
- 
+    DB_URI = os.environ['TESTING_DB_URI']
    
 class Development(Config):
     """
@@ -20,7 +20,7 @@ class Development(Config):
     """
 
     DEBUG = False
-    
+    DB_URI = os.environ['DEVELOPMENT_DB_URI']
 
 configurations = {
     "testing": Testing,
