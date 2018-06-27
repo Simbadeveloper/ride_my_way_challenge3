@@ -1,28 +1,23 @@
 import os
 
-
 class Config(object):
-  
+    """ Base configuration. """
+
     SECRET_KEY = os.environ['APP_SECRET_KEY']
 
 
-class Testing(Config):
-    """
-    Configuration for testing environment.
-    """
+class TestingConfig(Config):
+    """  Testing environment configuration  """
 
     DEBUG = True
-    DB_URI = os.environ['TESTING_DB_URI']
-   
-class Development(Config):
-    """
-    Configuration for development environment.
-    """
+    
+    
+class DevelopmentConfig(Config):
+    """  Development environment configuration.  """
 
-    DEBUG = False
-    DB_URI = os.environ['DEVELOPMENT_DB_URI']
-
+    DEBUG = True
+        
 configurations = {
-    "testing": Testing,
-    "development": Development
+    "testing": TestingConfig,
+    "development": DevelopmentConfig
 }
