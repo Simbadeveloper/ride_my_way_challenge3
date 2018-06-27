@@ -10,3 +10,8 @@ tests/__pycache__
 __pycache__/main.cpython-36.pyc
 __pycache__/main.cpython-36.pyc
 .coverage
+tests/__init__.pyc
+tests/base.pyc
+api/views.pyc
+api/__init__.pyc
+__init__.pyc
