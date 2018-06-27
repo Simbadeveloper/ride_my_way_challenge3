@@ -47,8 +47,9 @@ class Users(Resource):
         pass
 
     def get(self):
-        """  Get rides created by him/her.  """
+        """  Get ride requests created by him/her.  """
         pass
 
     def put(self):
+        """  Method for a user to edit their ride.  """
         pass
