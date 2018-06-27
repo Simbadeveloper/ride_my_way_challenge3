@@ -15,7 +15,7 @@ class TestingConfig(Config):
 class DevelopmentConfig(Config):
     """  Development environment configuration.  """
 
-    DEBUG = True
+    DEBUG = False
         
 configurations = {
     "testing": TestingConfig,
