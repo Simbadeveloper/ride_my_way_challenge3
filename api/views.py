@@ -1,8 +1,10 @@
+import psycopg2
 from flask import request, jsonify
 from flask_restful import Resource
 from .models import User, Ride, Request
+from .db_tables import conn
 
-
+cur=conn.cursor()
 
 class Signup(Resource):
     """  Class for registration.  """
@@ -55,7 +57,44 @@ class Login(Resource):
     def post(self):
         """ Method for signing in a user.  """
 
-        pass
+        data = request.get_json()
+        username = data['username']
+        new_password = data['password']
+
+        if username == " ":
+            return {'message': "Username is required."}
+        elif new_password == " ":
+            return {'message': "password field cannot be empty."}
+        
+        # user = User(username=username, 
+        #         firstname="", 
+        #         lastname="", 
+        #         email="", 
+        #         password="")
+        # fetch users details
+        cur.execute("SELECT * FROM users WHERE username='{0}';".format(username))
+        user=cur.fetchone()
+        #get password
+        user_password=user[5]
+        user_email=user[4]
+        if username == user[1]:
+            userd = User(username=username, 
+                firstname=user[1], 
+                lastname=user[2], 
+                email=user_email, 
+                password=user_password)
+            if userd.password_verify(new_password):
+                return {'message':"Successfully registered!",'email':user_email}
+            return{'message':"Passwords do not match!"}
+        return{'msg':"You are not registered!"}
+
+        # user.get_user_by_username()
+        # if user.user:
+        #     if user.password_verify(new_password):
+        #         return{'logged in'}
+        #     return{'message':"wrong password"}
+        # return{'mgs':"not registered"}
+
 
 class Logout(Resource):
     """  Class for logging out a user.  """
