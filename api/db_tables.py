@@ -38,7 +38,7 @@ def rides():
         """
         CREATE TABLE rides(
             id serial PRIMARY KEY,
-            driver varchar NOT NULL,
+            driver varchar UNIQUE NOT NULL,
             destination varchar,
             departure_time varchar, 
             route varchar, 
