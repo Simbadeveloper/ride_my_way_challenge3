@@ -1,0 +1,89 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# ride_my_way
+Ride my way is a carpooling application that allows users to share rides.
+
+## Registration [/api/v2/auth/signup]
+
+###  Registration[POST]
+
+Endpoint for a user to register from.
+
++ Request (application/json)
+
+        {
+            "username": "SnyderMbishai",
+            "firstname":"Snyder",
+            "lastname":"Mbishai",
+            "email":"email@gmail.com",
+            "password":"password123",
+            "confirm_pwd":"password123"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/auth/signup
+
+    + Body
+
+            {
+                "username": "SnyderMbishai",
+                "message": "registered"
+            }
+
+## Login [/api/v2/auth]
+
+###  Login[POST]
+
+Endpoint for login.
+
++ Request (application/json)
+
+        {
+            "username": "SnyderMbishai",
+            "password":"password123",
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/auth/login
+
+    + Body
+
+            {
+                "username": "SnyderMbishai",
+                "message": "Logged in!"
+            }
+            
+## Rides [/api/v2/rides]
+
+### List All Questions [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 2048
+                    }, {
+                        "choice": "Python",
+                        "votes": 1024
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 512
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 256
+                    }
+                ]
+            }
+        ]
