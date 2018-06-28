@@ -93,7 +93,7 @@ class Logout(Resource):
 class Rides(Resource):
     """  Class for Ride offers.  """
 
-    def get(self, ride_id=None):
+    def getone(self, ride_id=None):
         """  Method for getting ride/s"""
 
         #get a single offer
@@ -110,15 +110,18 @@ class Rides(Resource):
                         }
             return{'message':'Ride does not exist!'}
 
-        # cur.execute("SELECT * FROM rides ")
-        # rides=cur.fetchall()
-        # return{'rides':rides}
-      
-
     def post(self, id): 
         """  Method for posting requests to a ride.  """ 
 
         pass
+
+class GetAllRides(Resource):
+
+        def get(self):
+            #get all
+            cur.execute("SELECT * FROM rides ;")
+            rides=cur.fetchall()
+            return{'rides':rides} 
 
 
 class Users(Resource):
