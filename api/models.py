@@ -62,13 +62,13 @@ class User(object):
             'email':self.email
             }
 
-    def generate_token(self, user_id):
+    def generate_token(self, username):
         """ Token generation""" 
 
         payload = {
             'exp':datetime.utcnow() + timedelta(minutes=10000),
             'iat':datetime.utcnow(),
-            'sub':user_id
+            'sub':username
         }
         
         token = jwt.encode(
