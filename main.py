@@ -29,6 +29,8 @@ def create_app(configuration):
     return app
 
 def connect_to_db():
+    """  Method for connecting to the database. """
+    
     connection = 'dbname=development user=postgres password=password77 host=localhost '
     print (connection)
     try:
