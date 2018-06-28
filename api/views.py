@@ -73,7 +73,7 @@ class Login(Resource):
         #get password
         user_password=user[5]
         user_email=user[4]
-        user_id=user[0]
+        
         if username == user[1]:
             userd = User(username=username, 
                 firstname=user[1], 
@@ -81,7 +81,7 @@ class Login(Resource):
                 email=user_email, 
                 password=user_password)
             if userd.password_verify(new_password):
-                token=userd.generate_token(user_id)
+                token=userd.generate_token(username)
                 if token:
                     result = {
                         'username':userd.username,
@@ -104,6 +104,7 @@ class Logout(Resource):
 class Rides(Resource):
     """  Class for Ride offers.  """
 
+    #anyone canview
     def get(self, ride_id=None):
         """  Method for getting ride/s"""
 
@@ -121,6 +122,7 @@ class Rides(Resource):
                         },200
             return{'message':'Ride does not exist!'},404
 
+    @user_token_required
     def post(self, ride_id): 
         """  Method for posting requests to a ride.  """ 
 
@@ -139,7 +141,7 @@ class Rides(Resource):
 
 class GetAllRides(Resource):
     """  Class for getting all rides.  """
-
+    #anyone can view
     def get(self):
         """  Method for getting all rides.  """
 
@@ -153,7 +155,7 @@ class GetAllRides(Resource):
 class Users(Resource):
     """  Class for handling specific user stuff.  """
 
-
+    @user_token_required
     def post(self):
         """  Create ride offer.  """
 
@@ -197,6 +199,7 @@ class Users(Resource):
 
         return{'message':"Ride offer successfully created"},201
 
+    @user_token_required
     def get(self,ride_id):
         """  Get ride requests created by him/her.  """
 
