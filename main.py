@@ -29,7 +29,7 @@ def create_app(configuration):
     return app
 
 def connect_to_db():
-    connection = 'dbname=development user=carpool password=carpool host=localhost '
+    connection = 'dbname=development user=postgres password=password77 host=localhost '
     print (connection)
     try:
         return psycopg2.connect(connection)

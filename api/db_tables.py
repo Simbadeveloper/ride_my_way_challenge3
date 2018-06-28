@@ -3,7 +3,7 @@ import psycopg2
 def connect_to_db():
     """  Method for connecting to the database.  """
 
-    connection = 'dbname=development user=carpool password=carpool host=localhost '
+    connection = 'dbname=development user=postgres password=password77 host=localhost '
     print (connection)
     try:
         return psycopg2.connect(connection)
