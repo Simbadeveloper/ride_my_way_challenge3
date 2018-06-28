@@ -21,13 +21,18 @@ class User(object):
         self.password = password
 
     def password_hash(self, password):
+        """   Method for encrypting user's password.  """
+
         self.password = pwd.encrypt(password)
     
     def password_verify(self, password):
+        """   Method for veryfying a users password.  """
+
         return pwd.verify(password, self.password)
 
     def register(self):
         """" Method for adding a verified user into the database.  """
+
         user = """INSERT INTO
                 users  (username, firstname, lastname, email, password)
                 VALUES ('%s','%s','%s','%s','%s')""" % (self.username, self.firstname, self.lastname, self.email,self.password)
@@ -36,10 +41,13 @@ class User(object):
 
     def get_user_by_username(self):
         """  Method for checking whether a user is in the database using username.  """
+
         cur.execute("SELECT * FROM users WHERE username='{0}';".format(self.username))
         self.user = cur.fetchone()
 
     def user_exists(self):
+        """  Method for checking a users existence using the email.  """
+
         cur.execute("SELECT * FROM users WHERE email='{0}';".format(self.email))
         return_data = cur.fetchone()
         if return_data:
@@ -47,13 +55,16 @@ class User(object):
         return False
 
     def view(self):
+        """  Method for viewing user's detail.  """
+
         return {
             'username':self.username,
             'email':self.email
-        }
+            }
 
     def generate_token(self, user_id):
         """ Token generation""" 
+
         payload = {
             'exp':datetime.utcnow() + timedelta(minutes=10000),
             'iat':datetime.utcnow(),
@@ -69,6 +80,8 @@ class User(object):
 
     @staticmethod
     def decode_token(token):
+        """  Method for decoding the generated password.  """
+
         payload = jwt.decode(token, os.getenv('APP_SECRET_KEY'))
         return payload['sub']
 
@@ -88,6 +101,7 @@ class Ride(object):
 
     def add_ride(self):
         """" Method for adding a ride to the database.  """
+
         ride = """INSERT INTO
                 rides  (driver, destination, departure_time, route, extras)
                 VALUES ('%s','%s','%s','%s','%s')""" % (self.driver, self.destination, self.departure_time, self.route,self.extras)
@@ -95,6 +109,8 @@ class Ride(object):
         conn.commit()
         
     def ride_exists(self):
+        """  Method for checking if a ride exists.  """
+
         cur.execute("SELECT * FROM rides WHERE route='{0}';".format(self.route))
         return_data = cur.fetchone()
         if return_data:
@@ -103,7 +119,7 @@ class Ride(object):
 
 
 class Request(object):
-    """  Class for request object.  """
+    """  Class for the request object.  """
     
     def __init__(self, user_id, ride_id, status):
         """  Initialising the request model objects.  """
