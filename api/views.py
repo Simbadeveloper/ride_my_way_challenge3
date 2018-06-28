@@ -189,7 +189,36 @@ class Users(Resource):
         cur.execute("SELECT * FROM requests WHERE ride_id='{0}';".format(ride_id))
         rqs = cur.fetchall()
         return {'requests':rqs}
+        
 
-    def put(self):
-        """  Method for a user to edit their ride.  """
-        pass
+    def put(self, ride_id, rqt_id):
+        """  Method for a user to respond to requests made on their ride offers.  """
+
+        data=request.get_json()
+        status=data['status']
+
+        # #get rides first
+        # cur.execute("SELECT * FROM requests WHERE ride_id='{0}';".format(ride_id))
+        # rqs = cur.fetchall()
+
+        # #choose the request that you you want to respond to using the id 
+        # cur.execute("SELECT * FROM requests id='{0}';".format(rqt_id))
+        # rqs = cur.fetchone()
+
+        cur.execute("UPDATE requests SET status='{0}' WHERE id='{0}';".format(status,rqt_id))
+        # conn.commit()
+
+        #View updated
+        cur.execute("SELECT * FROM requests id='{0}';".format(rqt_id))
+        rqs = cur.fetchone()
+
+        return {'msg':"updated", 'request_status':rqs[3]}
+
+
+
+
+
+
+
+
+        
