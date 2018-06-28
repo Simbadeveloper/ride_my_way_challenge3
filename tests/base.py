@@ -2,9 +2,7 @@ import json
 import unittest 
 from main import create_app
 import psycopg2
-from api.db_tables import connect_to_db, users, rides
-conn=connect_to_db() 
-cur=conn.cursor()
+from api.db_tables import users, rides, requests
 
 class Base(unittest.TestCase):
     """ Base class. """
@@ -13,7 +11,11 @@ class Base(unittest.TestCase):
         """ Set up testing. """
 
         self.app = create_app('testing')
-        self.client = self.app.test_client()        
+        self.client = self.app.test_client() 
+        self.users = users
+        self.rides=rides
+        self.requests=requests 
+        self.conn  = psycopg2.connect('dbname=development user=postgres password=password77 host=localhost')      
         self.user1_data={"username":"Kyalo", "firstname":"NANA", "lastname":"Emoji", "email":"kyalo@gmail.com", "password":"123456444", "confirm_pwd":"123456444"}
         self.user2_data={"username":"Gloria", "firstname":"Mary", "lastname":"Maua", "email":"gloriaa@gmail.com", "password":"123456789", "confirm_pwd":"1234567789"}
         self.login_data={"username":"Mbish", "password":"123456"}
@@ -22,13 +24,13 @@ class Base(unittest.TestCase):
         self.request_action_data={"state":"Rejected"}
         self.logout_data = {"action":"logout"}
 
+
     def tearDown(self):
         """ Clear anything that has been saved. """
-        
-        # cur.execute("TRUNCATE TABLE users, rides, requests;")
-    #     conn.commit()
-    #     conn.close()
+        cur=self.conn.cursor()      
+        cur.execute("TRUNCATE TABLE users, rides, requests;")
+        self.conn.commit()
+        self.conn.close()
        
-
         pass
     
