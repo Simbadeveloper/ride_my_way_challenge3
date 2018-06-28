@@ -54,16 +54,29 @@ class User(object):
 class Ride(object):
     """  Class for ride model.  """
 
-    def __init__(self, ride_id, driver, destination, departure_time, route, extras):
+    def __init__(self, driver, destination, departure_time, route, extras):
         """  Initialising the ride model objects.  """
 
-        self.ride_id = ride_id
         self.driver = driver
         self.destination = destination
         self.departure_time = departure_time
         self.route = route
         self.extras = extras
 
+    def add_ride(self):
+        """" Method for adding a ride to the database.  """
+        ride = """INSERT INTO
+                rides  (driver, destination, departure_time, route, extras)
+                VALUES ('%s','%s','%s','%s','%s')""" % (self.driver, self.destination, self.departure_time, self.route,self.extras)
+        cur.execute(ride)
+        conn.commit()
+        
+    def ride_exists(self):
+        cur.execute("SELECT * FROM rides WHERE route='{0}';".format(self.route))
+        return_data = cur.fetchone()
+        if return_data:
+            return True
+        return False
 
 
 class Request(object):
