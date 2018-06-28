@@ -22,8 +22,8 @@ def create_app(configuration):
     api.add_resource(Rides, '/api/v2/rides/<int:ride_id>', 
                         '/api/v2/rides/<int:ride_id>/requests')
     api.add_resource(Users, '/api/v2/users/rides',
-                            '/api/v2/users/rides/<int:ride_id>/requests', 
-                            '/api/v2/users/rides/<int:ride_id>requests/<int:request_id>')
+                            '/api/v2/users/rides/<int:ride_id>/requests',
+                            '/api/v2/users/rides/<int:ride_id>requests/<int:rqt_id>')
 
         
     return app
