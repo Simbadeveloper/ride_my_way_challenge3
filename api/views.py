@@ -5,6 +5,7 @@ from .models import User, Ride, Request
 from .db_tables import conn
 
 cur=conn.cursor()
+#pylint: disable=E1305
 
 class Signup(Resource):
     """  Class for registration.  """
@@ -71,6 +72,7 @@ class Login(Resource):
         #get password
         user_password=user[5]
         user_email=user[4]
+        user_id=user[0]
         if username == user[1]:
             userd = User(username=username, 
                 firstname=user[1], 
@@ -78,8 +80,16 @@ class Login(Resource):
                 email=user_email, 
                 password=user_password)
             if userd.password_verify(new_password):
-                return {'message':"Successfully registered!",'email':user_email}
-            return{'message':"Passwords do not match!"}
+                token=userd.generate_token(user_id)
+                if token:
+                    result = {
+                        'username':userd.username,
+						'message':'Successfully logged in',
+						'user_token':token.decode()               
+                    }
+                return{'message':"OOpsy!!Failed to generate token."}
+                
+            return{'message':"Wrong password!"}
         return{'msg':"You are not registered!"}
 
 class Logout(Resource):

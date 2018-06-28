@@ -1,7 +1,9 @@
+import os
 import psycopg2
 from passlib.apps import custom_app_context as pwd
 from .db_tables import connect_to_db, users
-# import jwt
+import jwt
+from datetime import datetime, timedelta
 
 conn=connect_to_db()
 cur=conn.cursor()
@@ -49,6 +51,26 @@ class User(object):
             'username':self.username,
             'email':self.email
         }
+
+    def generate_token(self, user_id):
+        """ Token generation""" 
+        payload = {
+            'exp':datetime.utcnow() + timedelta(minutes=10000),
+            'iat':datetime.utcnow(),
+            'sub':user_id
+        }
+        
+        token = jwt.encode(
+            payload,           
+            os.getenv('APP_SECRET_KEY'),
+            algorithm='HS256'
+            )
+        return token
+
+    @staticmethod
+    def decode_token(token):
+        payload = jwt.decode(token, os.getenv('APP_SECRET_KEY'))
+        return payload['sub']
 
               
 
