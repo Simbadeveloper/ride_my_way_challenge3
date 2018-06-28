@@ -1,14 +1,15 @@
 import json
 from .base import Base
 
+
 class TestRegistration(Base):
     """  Class for testing user registration.  """
 
-    def test_successful_user_registration(self):         
-        """  Method for testing that registration of a user goes through successfully.  """
+    # def test_successful_user_registration(self):         
+    #     """  Method for testing that registration of a user goes through successfully.  """
 
-        response = self.client.post('/api/v2/auth/signup',data=json.dumps(self.user1_data), content_type='application/json')
-        self.assertEqual(response.status_code, 201)
+    #     response = self.client.post('/api/v2/auth/signup',data=json.dumps(self.user1_data), content_type='application/json')
+    #     self.assertEqual(response.status_code, 201)
 
     def test_user_already_exists(self): 
         """  Method for testing that registration of a user is only once(Username).  """
