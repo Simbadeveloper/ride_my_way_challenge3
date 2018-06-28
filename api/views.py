@@ -183,9 +183,12 @@ class Users(Resource):
 
         return{'message':"Ride offer successfully created"},201
 
-    def get(self):
+    def get(self,ride_id):
         """  Get ride requests created by him/her.  """
-        pass
+
+        cur.execute("SELECT * FROM requests WHERE ride_id='{0}';".format(ride_id))
+        rqs = cur.fetchall()
+        return {'requests':rqs}
 
     def put(self):
         """  Method for a user to edit their ride.  """
