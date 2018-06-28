@@ -56,7 +56,7 @@ def requests():
         """
         CREATE TABLE requests(
             id serial PRIMARY KEY,
-            user_id int,
+            username varchar,
             ride_id int,
             status varchar);
         """

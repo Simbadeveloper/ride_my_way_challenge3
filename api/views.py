@@ -3,6 +3,7 @@ from flask import request, jsonify
 from flask_restful import Resource
 from .models import User, Ride, Request
 from .db_tables import conn
+from .decorators import user_token_required
 
 cur=conn.cursor()
 #pylint: disable=E1305
@@ -103,7 +104,7 @@ class Logout(Resource):
 class Rides(Resource):
     """  Class for Ride offers.  """
 
-    def getone(self, ride_id=None):
+    def get(self, ride_id=None):
         """  Method for getting ride/s"""
 
         #get a single offer
@@ -128,14 +129,12 @@ class Rides(Resource):
         status=data['status']
         cur.execute("SELECT * FROM users WHERE username='{0}';".format(username))
         user=cur.fetchone()
-        user_id=user[0]
-        ride_id=ride_id
+        if user:
+            new_request=Request(username=username,ride_id=ride_id, status=status)
+            new_request.add_request()
 
-        new_request=Request( user_id=user_id,ride_id=ride_id, status=status)
-
-        new_request.add_request()
-
-        return{'message':"Request has been placed successfully!"},200
+            return{'message':"The request has been made. Please wait for feedback from the driver."},201
+        return{'message':"Invalid Username"},404
 
 
 class GetAllRides(Resource):
@@ -153,6 +152,7 @@ class GetAllRides(Resource):
 
 class Users(Resource):
     """  Class for handling specific user stuff.  """
+
 
     def post(self):
         """  Create ride offer.  """
