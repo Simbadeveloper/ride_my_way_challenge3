@@ -1,7 +1,7 @@
 import psycopg2
 from passlib.apps import custom_app_context as pwd
 from .db_tables import connect_to_db, users
-import jwt
+# import jwt
 
 conn=connect_to_db()
 cur=conn.cursor()
