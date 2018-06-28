@@ -65,13 +65,7 @@ class Login(Resource):
             return {'message': "Username is required."}
         elif new_password == " ":
             return {'message': "password field cannot be empty."}
-        
-        # user = User(username=username, 
-        #         firstname="", 
-        #         lastname="", 
-        #         email="", 
-        #         password="")
-        # fetch users details
+
         cur.execute("SELECT * FROM users WHERE username='{0}';".format(username))
         user=cur.fetchone()
         #get password
@@ -87,14 +81,6 @@ class Login(Resource):
                 return {'message':"Successfully registered!",'email':user_email}
             return{'message':"Passwords do not match!"}
         return{'msg':"You are not registered!"}
-
-        # user.get_user_by_username()
-        # if user.user:
-        #     if user.password_verify(new_password):
-        #         return{'logged in'}
-        #     return{'message':"wrong password"}
-        # return{'mgs':"not registered"}
-
 
 class Logout(Resource):
     """  Class for logging out a user.  """
@@ -123,7 +109,45 @@ class Users(Resource):
     def post(self):
         """  Create ride offer.  """
 
-        pass
+        data = request.get_json()
+        driver = data['driver'] 
+        destination = data['destination']
+        departure_time = data['destination']
+        route = data['route']
+        extras = data['extras']
+
+        new_ride=Ride(
+            driver=driver, 
+            destination=destination, 
+            departure_time=departure_time, 
+            route=route, 
+            extras=extras)
+
+        if driver == " ":
+            return {'message': "field cannot be empty"}
+        elif destination == " ":
+            return {'message':"provide the destination point"}
+        elif departure_time == " ":
+            return {'message':"please provide the departure time"}
+        elif route == " ":
+            return{'message':"What route will we be taking?"}
+        elif extras == " ":
+            return {'message':"Are you sure you have nothing else to add?"}
+        
+        cur.execute("SELECT * FROM rides WHERE route='{0}';".format(route))
+        rd = cur.fetchone()
+        if rd:
+            if rd[4]==route and rd[3]==departure_time:
+                return{'message':"You hare a ride going that way at that time."}
+            return{'message':"No overlaps for you"}
+
+        if new_ride.ride_exists() == True:
+            return{'message':'ride exists!'},409
+
+
+        new_ride.add_ride()
+
+        return{'message':"Ride offer successfully created"},201
 
     def get(self):
         """  Get ride requests created by him/her.  """
