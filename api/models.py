@@ -3,7 +3,7 @@ from passlib.apps import custom_app_context as pwd
 from .db_tables import connect_to_db, users
 
 conn=connect_to_db()
-cur = conn.cursor()
+cur=conn.cursor()
 
 class User(object):
     """  Class for user model.  """
