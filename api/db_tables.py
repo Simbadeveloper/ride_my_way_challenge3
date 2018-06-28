@@ -15,7 +15,7 @@ cur = conn.cursor()
 
 def users():
     """  Method for creating the users table.  """
-
+    
     table = (
         """ 
         CREATE TABLE users(
