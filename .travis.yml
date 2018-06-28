@@ -13,8 +13,7 @@ env:
 before_script:
   - source .env
   - psql -c "CREATE DATABASE development;" -U postgres
-  - psql -c "CREATE USER carpool WITH PASSWORD 'carpool';" -U postgres
-
+  - python api/db_tables.py
 
 script: 
   - py.test --cov tests
