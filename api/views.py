@@ -110,10 +110,23 @@ class Rides(Resource):
                         }
             return{'message':'Ride does not exist!'}
 
-    def post(self, id): 
+    def post(self, ride_id): 
         """  Method for posting requests to a ride.  """ 
 
-        pass
+        data=request.get_json()
+        username=data['username']
+        status=data['status']
+        cur.execute("SELECT * FROM users WHERE username='{0}';".format(username))
+        user=cur.fetchone()
+        user_id=user[0]
+        ride_id=ride_id
+
+        new_request=Request( user_id=user_id,ride_id=ride_id, status=status)
+
+        new_request.add_request()
+
+        return{'message':"Request has been placed successfully!"}
+
 
 class GetAllRides(Resource):
 
