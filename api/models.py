@@ -83,9 +83,18 @@ class Ride(object):
 class Request(object):
     """  Class for request object.  """
     
-    def __init__(self, user_id, ride_id):
+    def __init__(self, user_id, ride_id, status):
         """  Initialising the request model objects.  """
 
         self.user_id = user_id
         self.ride_id = ride_id
+        self.status=status
 
+    def add_request(self):
+        """" Method for adding a request to the database.  """
+
+        request = """INSERT INTO
+                requests  (user_id, ride_id, status)
+                VALUES ('%s','%s','%s')""" % (self.user_id, self.ride_id, self.status)
+        cur.execute(request)
+        conn.commit()
