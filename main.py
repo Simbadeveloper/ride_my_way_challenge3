@@ -34,7 +34,7 @@ def connect_to_db():
     try:
         return psycopg2.connect(connection)
     except:
-        print("cant connect")
+        print("cant connect hey")
 
 
 app = create_app('development')
