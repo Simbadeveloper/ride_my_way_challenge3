@@ -28,8 +28,8 @@ before_script:
             departure_time varchar, 
             route varchar, 
             extras varchar);""" -U postgres
-  - psql -c "grant all on users to carpool" -U postgres
-  - psql -c "grant all on users_id_seq to carpool" -U postgres
+  - psql -c "grant all on users to carpool;" -U postgres
+  - psql -c "grant all on users_id_seq to carpool;" -U postgres
 
 script: 
   - py.test --cov tests
