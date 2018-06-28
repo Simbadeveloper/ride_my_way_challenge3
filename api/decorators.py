@@ -13,12 +13,14 @@ def user_token_required(func):
         try:
             header = request.headers.get('Authorization')
             if header:
-                token = header.split('')[1]
+                token = header.split(' ')[1]
             if token:
-                user_id = User.decode_token(token)
-                cur.execute("SELECT * FROM users WHERE id='{0}';".format(user_id))
+                username = User.decode_token(token)
+                cur.execute("SELECT * FROM users WHERE username='{0}';".format(username))
                 user=cur.fetchone()
-                return func(user=user, *args, **kwargs)
+                if user:
+                    return func(*args, **kwargs)
+                return{'You are not a user'}
             return {'message':"You are not logged in"}, 401
         except Exception as e:
             return {'message':"An error occured", 'error':str(e)},400
