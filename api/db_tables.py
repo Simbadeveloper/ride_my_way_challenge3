@@ -63,3 +63,8 @@ def requests():
     )
     cur.execute(table)
     conn.commit()
+
+if __name__ == "__main__":
+   users()
+   rides()
+   requests()
