@@ -14,22 +14,22 @@ before_script:
   - source .env
   - psql -c "CREATE DATABASE development;" -U postgres
   - psql -c "CREATE USER carpool WITH PASSWORD 'carpool';" -U postgres
-  - psql -c "CREATE TABLE users(
+  - psql -c """CREATE TABLE users(
         id serial PRIMARY KEY,
         username varchar UNIQUE,
         firstname varchar,
         lastname varchar,
         email varchar UNIQUE, 
-        password varchar);" -U postgres
-  - psql -c "CREATE TABLE rides(
+        password varchar);""" -U postgres
+  - psql -c """CREATE TABLE rides(
             id serial PRIMARY KEY,
             driver varchar UNIQUE NOT NULL,
             destination varchar,
             departure_time varchar, 
             route varchar, 
-            extras varchar);" -U postgres
-  - psql -c "" -U postgres
-  - psql -c "" -U postgres
+            extras varchar);""" -U postgres
+  - psql -c "grant all on users to carpool" -U postgres
+  - psql -c "grant all on users_id_seq to carpool" -U postgres
 
 script: 
   - py.test --cov tests
