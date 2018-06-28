@@ -22,15 +22,15 @@ class Signup(Resource):
         confirmpwd = data['confirm_pwd']
 
         if username == " ":
-            return {'message': "Username is required."}
+            return {'message': "Username is required."},400 #bad request
         elif password == " ":
-            return {'message': "Please provide a password!"}
+            return {'message': "Please provide a password!"},400
         elif email == " ":
-            return {'message': "email field cannot be empty."}
+            return {'message': "email field cannot be empty."},400
         elif confirmpwd == " ":
-            return {'message':'please confirm the given password first'}
+            return {'message':'please confirm the given password first'},400
         elif password != confirmpwd:
-            return {'message':"Passwords do not match!"}
+            return {'message':"Passwords do not match!"},409 #conflict
                 
         new_user = User(            
             username=username, 
@@ -63,9 +63,9 @@ class Login(Resource):
         new_password = data['password']
 
         if username == " ":
-            return {'message': "Username is required."}
+            return {'message': "Username is required."},400
         elif new_password == " ":
-            return {'message': "password field cannot be empty."}
+            return {'message': "password field cannot be empty."},400
 
         cur.execute("SELECT * FROM users WHERE username='{0}';".format(username))
         user=cur.fetchone()
@@ -85,12 +85,12 @@ class Login(Resource):
                     result = {
                         'username':userd.username,
 						'message':'Successfully logged in',
-						'user_token':token.decode()               
-                    }
-                return{'message':"OOpsy!!Failed to generate token."}
-                
-            return{'message':"Wrong password!"}
-        return{'msg':"You are not registered!"}
+						'user_token':token.decode()
+                        }
+                    return{'result':result}, 200 #ok
+                return{'message':"OOpsy!!Failed to generate token."},401 #unauthorized            
+            return{'message':"Wrong password!"},401
+        return{'msg':"You are not registered!"},401
 
 class Logout(Resource):
     """  Class for logging out a user.  """
@@ -117,8 +117,8 @@ class Rides(Resource):
                         'departure_time':ride[3],
                         'route':ride[4],
                         'extra':ride[5]
-                        }
-            return{'message':'Ride does not exist!'}
+                        },200
+            return{'message':'Ride does not exist!'},404
 
     def post(self, ride_id): 
         """  Method for posting requests to a ride.  """ 
@@ -135,16 +135,20 @@ class Rides(Resource):
 
         new_request.add_request()
 
-        return{'message':"Request has been placed successfully!"}
+        return{'message':"Request has been placed successfully!"},200
 
 
 class GetAllRides(Resource):
+    """  Class for getting all rides.  """
 
-        def get(self):
-            #get all
-            cur.execute("SELECT * FROM rides ;")
-            rides=cur.fetchall()
-            return{'rides':rides} 
+    def get(self):
+        """  Method for getting all rides.  """
+
+        cur.execute("SELECT * FROM rides ;")
+        rides=cur.fetchall()
+        if rides:
+            return{'rides':rides},200 
+        return{'message':"There are no rides at the moment"},404
 
 
 class Users(Resource):
@@ -168,22 +172,22 @@ class Users(Resource):
             extras=extras)
 
         if driver == " ":
-            return {'message': "field cannot be empty"}
+            return {'message': "field cannot be empty"},400
         elif destination == " ":
-            return {'message':"provide the destination point"}
+            return {'message':"provide the destination point"},400
         elif departure_time == " ":
-            return {'message':"please provide the departure time"}
+            return {'message':"please provide the departure time"},400
         elif route == " ":
-            return{'message':"What route will we be taking?"}
+            return{'message':"What route will we be taking?"},400
         elif extras == " ":
-            return {'message':"Are you sure you have nothing else to add?"}
+            return {'message':"Are you sure you have nothing else to add?"},400
         
         cur.execute("SELECT * FROM rides WHERE route='{0}';".format(route))
         rd = cur.fetchone()
         if rd:
             if rd[4]==route and rd[3]==departure_time:
-                return{'message':"You hare a ride going that way at that time."}
-            return{'message':"No overlaps for you"}
+                return{'message':"You have a ride going that way at that time."},409
+            return{'message':"No overlaps for you"},200
 
         if new_ride.ride_exists() == True:
             return{'message':'ride exists!'},409
@@ -198,11 +202,11 @@ class Users(Resource):
 
         cur.execute("SELECT * FROM requests WHERE ride_id='{0}';".format(ride_id))
         rqs = cur.fetchall()
-        return {'requests':rqs}
+        return {'requests':rqs},200
         
 
     def put(self, ride_id, rqt_id):
-        """  Method for a user to respond to requests made on their ride offers.  """
+        """  Method for a user to respond to requests made to their ride offers.  """
 
         data=request.get_json()
         status=data['status']
@@ -221,8 +225,8 @@ class Users(Resource):
         #View updated
         cur.execute("SELECT * FROM requests id='{0}';".format(rqt_id))
         rqs = cur.fetchone()
-
-        return {'msg':"updated", 'request_status':rqs[3]}
+        
+        return {'msg':"updated", 'request_status':rqs[3]},200
 
 
 
