@@ -35,7 +35,6 @@ class User(object):
         """  Method for checking whether a user is in the database using username.  """
         cur.execute("SELECT * FROM users WHERE username='{0}';".format(self.username))
         self.user = cur.fetchone()
-        conn.close()
 
     def user_exists(self):
         cur.execute("SELECT * FROM users WHERE email='{0}';".format(self.email))
