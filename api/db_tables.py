@@ -57,7 +57,8 @@ def requests():
         CREATE TABLE requests(
             id serial PRIMARY KEY,
             user_id int,
-            ride_id int):
+            ride_id int,
+            status varchar);
         """
     )
     cur.execute(table)
