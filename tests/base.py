@@ -27,10 +27,9 @@ class Base(unittest.TestCase):
 
     def tearDown(self):
         """ Clear anything that has been saved. """
-        cur=self.conn.cursor()      
-        cur.execute("TRUNCATE TABLE users, rides, requests;")
-        self.conn.commit()
-        self.conn.close()
+        # cur=self.conn.cursor()      
+        # cur.execute("TRUNCATE TABLE users, rides, requests;")
+        # self.conn.commit()
+        # self.conn.close()
        
         pass
-    
