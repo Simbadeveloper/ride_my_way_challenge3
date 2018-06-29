@@ -187,9 +187,11 @@ class Users(Resource):
         cur.execute("SELECT * FROM rides WHERE route='{0}';".format(route))
         rd = cur.fetchone()
         if rd:
-            if rd[4]==route and rd[3]==departure_time:
-                return{'message':"You have a ride going that way at that time."},409
-            return{'message':"No overlaps for you"},200
+            
+            if rd[4]==route:
+                return{'message':"You have a ride set for that route."},409            
+            elif rd[3]==departure_time:
+                return{'message':"You have a ride set for that time."},409
 
         if new_ride.ride_exists() == True:
             return{'message':'ride exists!'},409
@@ -214,16 +216,8 @@ class Users(Resource):
         data=request.get_json()
         status=data['status']
 
-        # #get rides first
-        # cur.execute("SELECT * FROM requests WHERE ride_id='{0}';".format(ride_id))
-        # rqs = cur.fetchall()
-
-        # #choose the request that you you want to respond to using the id 
-        # cur.execute("SELECT * FROM requests id='{0}';".format(rqt_id))
-        # rqs = cur.fetchone()
-
         cur.execute("UPDATE requests SET status='{0}' WHERE id='{0}';".format(status,rqt_id))
-        # conn.commit()
+        conn.commit()
 
         #View updated
         cur.execute("SELECT * FROM requests id='{0}';".format(rqt_id))
