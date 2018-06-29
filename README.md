@@ -9,6 +9,10 @@ This repository is for the RideMyWay carpooling application APIs and testing wit
 
 RideMyWay is a carpooling application.
 
+#### Link to heroku
+
+https://ridemyway3.herokuapp.com/
+
 ## Functionality
 
 1. Signup
@@ -105,6 +109,9 @@ Endpoint                          | description         | Method
             {
             "Message": "Successfully registered."
             }
+
+
+![alt text](https://github.com/SnyderMbishai/ride_my_way_challenge3/blob/develop/screenshots/Screenshot%20from%202018-06-29%2008-30-38.png)
 
 ## Tests and coverage
 
