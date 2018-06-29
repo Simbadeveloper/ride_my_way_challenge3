@@ -21,7 +21,7 @@ def user_token_required(func):
                 if user:
                     return func(*args, **kwargs)
                 return{'You are not a user'}
-            return {'message':"You are not logged in"}, 401
+            return {'message':"If a user, make sure you login to get token."}, 401
         except Exception as e:
             return {'message':"An error occured", 'error':str(e)},400
     return decorated
