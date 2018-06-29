@@ -96,19 +96,23 @@ Endpoint                          | description         | Method
     - on body, select raw and add your details. example:
 
             {
-            "username":"SnyderMbishai",
-            "firstname":"snyder",
-            "lastname": "Mbishai",
-            "email":"csmbishai@gmail.com",
-            "password":"123456789",
-            "confirm_pwd":"123456789"
+                "username":"SnyderSnyder",
+	        "firstname":"Sarah",
+	        "lastname": "Pendo",
+	        "email":"one@gmail.com",
+	        "password":"password123",
+	        "confirm_pwd":"password123"
             }
 
     - click send. You get 201 status code and a message that says:
 
-            {
-            "Message": "Successfully registered."
-            }
+                {
+                "message": "You have been successfully registered!",
+                "details": {
+                        "username": "SnyderSnyder",
+                        "email": "one@gmail.com"
+                }
+                }
 
 
 ![alt text](https://github.com/SnyderMbishai/ride_my_way_challenge3/blob/develop/screenshots/Screenshot%20from%202018-06-29%2008-30-38.png)
