@@ -1,4 +1,4 @@
-import psycopg2
+# import psycopg2
 from flask import Flask
 from flask_restful import Api
 from api.views import  Signup, Login, Rides, Users, Logout, GetAllRides
@@ -28,15 +28,15 @@ def create_app(configuration):
         
     return app
 
-def connect_to_db():
-    """  Method for connecting to the database. """
+# def connect_to_db():
+#     """  Method for connecting to the database. """
     
-    connection = 'dbname=development user=postgres password=password77 host=localhost '
-    print (connection)
-    try:
-        return psycopg2.connect(connection)
-    except:
-        print("cant connect hey")
+#     connection = 'dbname=development user=postgres password=password77 host=localhost '
+#     print (connection)
+#     try:
+#         return psycopg2.connect(connection)
+#     except:
+#         print("cant connect hey")
 
 
 app = create_app('development')

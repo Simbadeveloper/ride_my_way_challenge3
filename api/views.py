@@ -209,7 +209,7 @@ class Users(Resource):
         rqs = cur.fetchall()
         return {'requests':rqs},200
         
-
+    @user_token_required
     def put(self, ride_id, rqt_id):
         """  Method for a user to respond to requests made to their ride offers.  """
 
